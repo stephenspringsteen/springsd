@@ -1,0 +1,54 @@
+---
+title: "ProjectFirstFewLines"
+author: "Stephen Springsteen"
+date: "12/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+#opts_knit$set(root.dir = "C:/Workspace/RFiles/")
+
+r <- getOption("repos")
+r["CRAN"] <- "http://cran.us.r-project.org"
+options(repos = r)
+```
+
+```{r Set Working Directory}
+dir <- "C:/School/GEO460G"
+setwd(dir)
+```
+
+```{r Packages}
+library(spdep)
+library(classInt)
+library(rgdal)
+library(sf)
+library(maptools)
+```
+
+```{r Reading in Files}
+# Load in Puerto Rico shapefile
+starbucks <- readOGR("Starbucks/EasternStarbucks.shp")
+dunkin <- readOGR("DunkinDonuts/EasternDunkinDonuts.shp")
+
+summary(starbucks)
+summary(dunkin)
+```
+
+```{r Summary of Files}
+plot(starbucks, lwd=1.5)
+plot(dunkin, add=T, col="gray")
+
+head(starbucks)
+head(dunkin)
+
+dunk.nb <- poly2nb(dunkin)
+dunk.listw <- nb2listw(dunk.nb, style = "B")
+```
+
+```{r}
+# Spatial autocorrelation tests
+moran.test(starbucks, dunkin)
+```
